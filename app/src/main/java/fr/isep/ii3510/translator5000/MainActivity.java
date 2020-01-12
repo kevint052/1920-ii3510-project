@@ -16,13 +16,15 @@ public class MainActivity extends AppCompatActivity {
 
     private Class intents[] = {PictureTranslation.class, TextVocalTranslationActivity.class};
     private List<String> buttonMethodsNames = Arrays.asList("imageTranslation", "textTranslation");
-    private Button imageTranslation, textTranslation;
+    private Button imageTranslation, textTranslation ;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         Resources res = getResources();
 
         // intents for button methods
