@@ -36,7 +36,7 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300px"
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
@@ -64,7 +64,17 @@
             android:layout_height="wrap_content"
             tools:layout_editor_absoluteX="182dp"
             tools:layout_editor_absoluteY="448dp" />
-
+        <TextView
+            android:id="@+id/textDetected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text detected in picture"
+            />
+        <Button
+            android:id="@+id/detectText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Detect text in picture" />
         <Button
             android:id="@+id/translateButton"
             android:layout_width="match_parent"

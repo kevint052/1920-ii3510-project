@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Class intents[] = {PictureTranslation.class, TextVocalTranslationActivity.class};
     private List<String> buttonMethodsNames = Arrays.asList("imageTranslation", "textTranslation");
-    private Button imageTranslation, textTranslation ;
+    private Button imageTranslation, textTranslation , back;
 
 
     @Override
@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 }
 
 

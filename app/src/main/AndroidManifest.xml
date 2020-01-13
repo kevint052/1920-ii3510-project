@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fr.isep.ii3510.translator5000">
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
 
-    <application
+   <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PictureTranslation"></activity>
+        <activity android:name=".PictureTranslation">
+            <meta-data
+                android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+                android:value="ocr" />
+        </activity>
         <activity android:name=".TextVocalTranslationActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
