@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
+        android:padding="48dp"
         tools:layout_editor_absoluteX="96dp"
         tools:layout_editor_absoluteY="94dp">
 
@@ -18,26 +18,36 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"
             android:text="Welcome to Translator 5000"
-            android:textSize="30sp" />
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            />
 
         <TextView
             android:id="@+id/type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Please choose a type of translation"
-            android:textSize="18sp" />
+            android:layout_marginHorizontal="10dp"
+            android:textSize="19sp" />
 
         <Button
             android:id="@+id/imageTranslation"
-            android:layout_width="match_parent"
+            android:layout_width="193dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="10dp"
             android:text="Image translation" />
 
         <Button
             android:id="@+id/textTranslation"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp"
             android:text="Text or vocal translation" />
 
 

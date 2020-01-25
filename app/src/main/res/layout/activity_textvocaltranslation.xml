@@ -6,17 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
+        android:padding="48dp"
         tools:layout_editor_absoluteX="96dp"
         tools:layout_editor_absoluteY="94dp">
 
@@ -25,11 +19,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Text and vocal translation"
-            android:textSize="30sp" />
+            android:layout_marginBottom="30dp"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <Spinner
             android:id="@+id/from"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/textFrom"
@@ -39,19 +36,21 @@
 
         <Button
             android:id="@+id/talk"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Talk" />
+            android:text="Voice input" />
 
         <Button
             android:id="@+id/swap"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Swap" />
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="30dp"
+            android:text="Swap languages" />
 
         <Spinner
             android:id="@+id/to"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/textTo"
@@ -61,15 +60,25 @@
 
         <Button
             android:id="@+id/listen"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Listen" />
+            android:text="Hear the traduction" />
 
         <Button
             android:id="@+id/shareButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="20dp"
             android:text="Share" />
+
+        <Button
+            android:id="@+id/back"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back" />
 
 
     </LinearLayout>

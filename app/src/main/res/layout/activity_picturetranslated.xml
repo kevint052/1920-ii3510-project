@@ -6,17 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center"
+        android:padding="48dp"
+
         tools:layout_editor_absoluteX="96dp"
         tools:layout_editor_absoluteY="94dp">
 
@@ -25,25 +20,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Translate text from a picture"
-            android:textSize="30sp" />
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="30dp"
+            android:layout_marginLeft="100dp"
             tools:srcCompat="@tools:sample/avatars" />
 
         <Button
             android:id="@+id/saveButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="100dp"
             android:text="Save the picture" />
 
         <Button
             android:id="@+id/shareButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="100dp"
             android:text="Share" />
+
+        <Button
+            android:id="@+id/back"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginHorizontal="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back" />
 
 
     </LinearLayout>
