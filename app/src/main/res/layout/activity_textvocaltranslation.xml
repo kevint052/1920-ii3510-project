@@ -40,12 +40,27 @@
             android:layout_height="wrap_content"
             android:text="Voice input" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:textSize="20sp"
+            android:text="Detecting.."
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/sourceLang"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Translate"
+            android:id="@+id/translate"/>
+
         <Button
             android:id="@+id/swap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="30dp"
-            android:layout_marginTop="30dp"
             android:text="Swap languages" />
 
         <Spinner
