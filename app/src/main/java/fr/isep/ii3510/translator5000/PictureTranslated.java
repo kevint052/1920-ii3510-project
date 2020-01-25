@@ -24,6 +24,8 @@ public class PictureTranslated extends AppCompatActivity {
     ImageView mImageView;
     Uri imageUri;
     private int IMAGE_CAPTURE_CODE = 1001;
+    private Button backButton;
+    Button saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,32 @@ public class PictureTranslated extends AppCompatActivity {
 
             }
         });
+
+        saveButton = (Button) findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                savePicture();
+            }
+        });
+
+        backButton = (Button) findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPictureTranslation();
+            }
+        });
     }
+
+    public void openPictureTranslation() {
+        Intent intent = new Intent(this, PictureTranslation.class);
+        startActivity(intent);
+    }
+
+    public void savePicture() {
+    }
+
 
     private void openCamera() {
         ContentValues values = new ContentValues();
