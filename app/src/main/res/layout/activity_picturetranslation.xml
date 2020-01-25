@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true"> <!--IMPORTANT otherwise backgrnd img. will not fill the whole screen -->
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,8 +16,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="48dp"
         android:orientation="vertical"
+        android:padding="40dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
@@ -28,22 +34,22 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:layout_marginVertical="10dp"
-            android:text="Take or select a translate and click on the detect button" />
+            android:text="Take or select a translate and click on the detect button"
+            android:textAlignment="center" />
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="300px"
-            android:layout_marginLeft="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="400px"
+            android:layout_marginLeft="0dp"
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <Button
@@ -60,37 +66,50 @@
 
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/toSpinner"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/sourceLang"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:layout_editor_absoluteX="182dp"
-            tools:layout_editor_absoluteY="448dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:text="Detecting ..."
+            android:textSize="15sp" />
+
         <TextView
             android:id="@+id/textDetected"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Text detected in picture"
-            />
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/colorPrimaryDark"
 
-        <Button
-            android:id="@+id/detectText"
+            android:text="Text detected in picture" />
+
+        <Spinner
+            android:id="@+id/toSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Detect text in picture" />
-        <Button
-            android:id="@+id/translateButton"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            tools:layout_editor_absoluteX="182dp"
+            tools:layout_editor_absoluteY="448dp" />
+
+        <TextView
+            android:id="@+id/translatedText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start the translation" />
+            android:text="translated text"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="15sp" />
 
         <Button
             android:id="@+id/back"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="50dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="50dp"
             android:text="Back" />
 
 
@@ -98,3 +117,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
