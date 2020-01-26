@@ -1,8 +1,11 @@
 package fr.isep.ii3510.translator5000;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -50,6 +53,11 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
 
 
     private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String TEXT = "text";
+    public String text;
+
     private TextView mSourceLang;
     private EditText mSourceText;
     private Button mTranslateBtn;
@@ -181,6 +189,7 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
         mTranslateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveData(sourceText);
                 setLanguagesCodes(mLanguageFrom.getSelectedItem().toString(), mLanguageTo.getSelectedItem().toString());
             }
         });
@@ -197,10 +206,44 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
         });
     }
 
+    //this part is for the history activity
+
+    public void saveData(String text) {
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(TEXT, text);
+        editor.apply();
+
+        Toast.makeText(this, "Input saved", Toast.LENGTH_SHORT).show();
+    }
+
+    public void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS,0);
+        text = sharedPreferences.getString(TEXT, "");
+
+    }
+
+    public static void setDefaults(String key, String value, Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+
+
+
     public void openHistoryActivity() {
         Intent intent = new Intent(this, History.class);
         startActivity(intent);
     }
+
+
+
+
+    //this part is for the Voice Input and Hear the translation buttons
 
     private void speak() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -264,6 +307,11 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
+
+    //We translate in two steps : 1. we retrieve the languages the user selected and get the codes
+    // and 2. we use the translator with the apprioriate codes and source text
 
     private void setLanguagesCodes(String languageFrom, String languageTo) {
         int langFromCode;
@@ -398,26 +446,5 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
                         });
     }
 
-
-
-
-    public void translate2(int langFromCode, int langToCode) {
-
-        mTranslatedText.setText("Translating..");
-        FirebaseTranslatorOptions options = new FirebaseTranslatorOptions.Builder()
-                //from language
-                .setSourceLanguage(langFromCode)
-                // to language
-                .setTargetLanguage(langToCode)
-                .build();
-
-        final FirebaseTranslator translator = FirebaseNaturalLanguage.getInstance()
-                .getTranslator(options);
-
-        FirebaseModelDownloadConditions conditions = new FirebaseModelDownloadConditions.Builder()
-                .build();
-
-        mTranslatedText.setText(mLanguageFrom.getSelectedItem().toString());
-    }
 
 }

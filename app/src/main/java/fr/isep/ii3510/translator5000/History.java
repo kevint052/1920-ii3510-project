@@ -1,13 +1,17 @@
 package fr.isep.ii3510.translator5000;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 
 public class History extends AppCompatActivity {
 
@@ -109,6 +113,15 @@ public class History extends AppCompatActivity {
         });
 
 
+        TextVocalTranslationActivity instance = new TextVocalTranslationActivity();
+        //instance.loadData();
+        mText1.setText(instance.text);
+
+    }
+
+    public static String getDefaults(String key, Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString(key, null);
     }
 
     public void translateAgain(String text){
