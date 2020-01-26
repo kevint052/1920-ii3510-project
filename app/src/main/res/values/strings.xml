@@ -2,12 +2,69 @@
     <string name="app_name">Translator 5000</string>
 
 
+   
     <string-array name="languages2">
-        <item>FR</item>
-        <item>EN</item>
-        <item>ES</item>
-        <item>IT</item>
+
+        <item>AF</item>
         <item>AR</item>
+        <item>BE</item>
+        <item>BG</item>
+        <item>BN</item>
+        <item>CA</item>
+        <item>CS</item>
+        <item>CY</item>
+        <item>DA</item>
+        <item>DE</item>
+        <item>EL</item>
+        <item>EN</item>
+        <item>EO</item>
+        <item>ES</item>
+        <item>ET</item>
+        <item>FA</item>
+        <item>FI</item>
+        <item>FR</item>
+        <item>GA</item>
+        <item>GL</item>
+        <item>GU</item>
+        <item>HE</item>
+        <item>HI</item>
+        <item>HR</item>
+        <item>HT</item>
+        <item>HU</item>
+        <item>ID</item>
+        <item>IS</item>
+        <item>IT</item>
+        <item>JA</item>
+        <item>KA</item>
+        <item>KN</item>
+        <item>KO</item>
+        <item>LT</item>
+        <item>LV</item>
+        <item>MK</item>
+        <item>MR</item>
+        <item>MS</item>
+        <item>MT</item>
+        <item>NL</item>
+        <item>NO</item>
+        <item>PL</item>
+        <item>SL</item>
+        <item>SK</item>
+        <item>RU</item>
+        <item>RO</item>
+        <item>PT</item>
+        <item>SQ</item>
+        <item>SV</item>
+        <item>SW</item>
+        <item>TA</item>
+        <item>TE</item>
+        <item>TH</item>
+        <item>TL</item>
+        <item>TR</item>
+        <item>UK</item>
+        <item>UR</item>
+        <item>VI</item>
+        <item>ZH</item>
+
 
     </string-array>
 
