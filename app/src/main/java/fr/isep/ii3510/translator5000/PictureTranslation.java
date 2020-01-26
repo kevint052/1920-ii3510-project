@@ -2,6 +2,7 @@ package fr.isep.ii3510.translator5000;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -10,13 +11,17 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.pdf.PdfRenderer;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -52,17 +57,23 @@ import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 
 
-
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Scanner;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.content.pm.PackageManager.*;
@@ -72,22 +83,26 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private static int RESULT_LOAD_IMAGE = 1;
     private Bitmap imageBtmp;
-    private List<String> buttonMethodsNames = Arrays.asList("picturesButton", "filesButton", "back");
+    private List<String> buttonMethodsNames = Arrays.asList("picturesButton", "filesButton", "shareButton", "back");
+    private List<String> languagesList = new ArrayList<>();
+    private Map<String, String> mapLanguages = new HashMap<String, String>();
     private ImageView mImageView;
     private TextView textDetected;
     private Spinner selectLanguage;
     private Button picturesButton;
     private Button filesButton;
     private Button translateButton;
+    private Button shareButton;
     private String detectText;
-    private TextView mSourceLang, mTranslatedText;
+    private Integer counter = 0;
+    private TextView mSourceLang, mTranslatedText, mTargetLang;
     private String sourceText;
     private Button back;
     private List<String> detectTextList = Arrays.asList();
     private FirebaseAuth mAuth;
+    private Integer counterBitmaps = 0;
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -95,16 +110,27 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
         setContentView(R.layout.activity_picturetranslation);
 
 
-
-
-
-
         mImageView = findViewById(R.id.imageView);
         textDetected = findViewById(R.id.textDetected);
         selectLanguage = findViewById(R.id.toSpinner);
 
         mSourceLang = findViewById(R.id.sourceLang);
+        mTargetLang = findViewById(R.id.targetLang);
         mTranslatedText = findViewById(R.id.translatedText);
+
+        // Read all languages available
+        Scanner scanner = new Scanner(
+                getResources().openRawResource(R.raw.languages));
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] language = line.split(",");
+            languagesList.add(language[0]);
+            mapLanguages.put(language[0], language[1]);
+
+        }
+        scanner.close();
+
 
         Resources res = getResources();
 
@@ -119,8 +145,10 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
 
 
         selectLanguage.setOnItemSelectedListener(this);
-        selectLanguage.setSelection(0);
 
+        // we initiate the spinner with int id = 17 which corresponds to French
+        selectLanguage.setSelection(17);
+        mTargetLang.setText(mapLanguages.get(17));
 
 
         // intents for button methods
@@ -144,11 +172,16 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
                             dispatchTakePictureIntent();
 
 
-                            ;
                             break;
+
 
                         case "filesButton":
                             pickImage();
+                            break;
+                        case "shareButton":
+                            share();
+                            break;
+
 
                     }
                 }
@@ -160,6 +193,8 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
 
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String langCode = languagesList.get(position);
+                mTargetLang.setText(mapLanguages.get(langCode));
                 translateText();
             }
 
@@ -168,9 +203,25 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
                 // your code here
             }
         });
+
     }
 
 
+    // Methods
+
+    // Share picture with others
+    private void share() {
+        if (imageBtmp == null) {
+            Toast.makeText(getApplicationContext(), "Nothing to share", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, "The status update text");
+            startActivity(Intent.createChooser(intent, "Dialog title text"));
+        }
+    }
+
+    // Come back to Main Activity
     protected void back() {
         finish();
         Intent myIntent = new Intent(PictureTranslation.this, MainActivity.class);
@@ -178,12 +229,24 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
 
     }
 
+    // Rotate image selected to try the text Detection
+    private void imageRotate() {
 
+
+        mImageView.setRotation((float) 90.0); // It will rotate your image in 90 degree
+        translateText();
+
+
+    }
+
+    // test translation
     protected void translateButton() {
         if (imageBtmp == null) {
             Toast.makeText(getApplicationContext(), "Bitmap is null", Toast.LENGTH_SHORT).show();
 
         } else {
+
+
             FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(imageBtmp);
             FirebaseVisionTextRecognizer firebaseVisionTextDetector = FirebaseVision.getInstance()
                     .getOnDeviceTextRecognizer();
@@ -222,6 +285,7 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
 
     }
 
+    // select existing picture
     private void pickImage() {
         Intent i = new Intent()
                 .setType("*/*")
@@ -233,45 +297,93 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("///////////Ok c'est parti ------00000000000");
+
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageBtmp = imageBitmap;
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            imageBtmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+            ContentResolver cr = getContentResolver();
+            //Save with user editable title
+            String title = "image_" + counterBitmaps;
+            String description = "Bitmap saved by Android-er";
+            String savedURL = MediaStore.Images.Media
+                    .insertImage(cr, imageBitmap, title, description);
+
             mImageView.setImageBitmap(imageBitmap);
+
         }
         if (requestCode == 123 && resultCode == RESULT_OK && null != data) {
             Uri selectedfile = data.getData(); //The uri with the location of the file
 
-            try {
-                Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedfile);
-                imageBtmp = imageBitmap;
-                mImageView = (ImageView) findViewById(R.id.imageView);
-                mImageView.setImageBitmap(imageBtmp);
-            } catch (IOException e) {
-                e.printStackTrace();
+            String fileExt = GetFileExtension(selectedfile);
+
+
+            if (fileExt.contains("pdf") || fileExt.contains("doc")) {
+
+                Toast.makeText(this, "This kind of file can't be read", Toast.LENGTH_SHORT).show();
+
+
             }
+            ;
+            if (!fileExt.contains("pdf")) {
+
+                Bitmap imageBitmap = null;
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedfile);
+                    imageBtmp = imageBitmap;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            ;
+
+
+            mImageView = (ImageView) findViewById(R.id.imageView);
+            mImageView.setImageBitmap(imageBtmp);
 
         }
         translateButton();
     }
 
 
+    // Get file extension
+    public String GetFileExtension(Uri uri) {
+        ContentResolver contentResolver = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+
+        // Return file Extension
+        return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void displayTextFromImage(FirebaseVisionText firebaseVisionText) {
         List<String> terms = new ArrayList<String>();
         List<FirebaseVisionText.TextBlock> blockList = firebaseVisionText.getTextBlocks();
+
         if (blockList.size() == 0) {
 
-            Toast.makeText(this, "No text", Toast.LENGTH_SHORT).show();
+            if (counter < 4) {
+                counter += 1;
+                imageRotate();
+            } else {
+                Toast.makeText(this, "No text", Toast.LENGTH_SHORT).show();
+
+            }
+
 
         } else {
+            counterBitmaps += 1;
             for (FirebaseVisionText.TextBlock block : firebaseVisionText.getTextBlocks()) {
                 String text = block.getText();
-                System.out.println(text);
                 terms.add(text);
 //
 
@@ -280,7 +392,6 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
 
 
             String joined = String.join(System.getProperty("line.separator"), terms);
-            System.out.println("Joined content is :" + joined);
             textDetected.setText(joined);
             translateText();
 
@@ -291,7 +402,7 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
                                int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         CharSequence charSequence = (CharSequence) parent.getItemAtPosition(pos);
-        System.out.println("Item : " + charSequence.toString());
+//        System.out.println("Item : " + charSequence.toString());
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
@@ -303,6 +414,8 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
 
     }
 
+
+    // translate text detected
     private void translateText() {
         sourceText = textDetected.getText().toString();
         FirebaseLanguageIdentification identifier = FirebaseNaturalLanguage.getInstance().getLanguageIdentification();
@@ -311,8 +424,12 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
         identifier.identifyLanguage(sourceText).addOnSuccessListener(new OnSuccessListener<String>() {
             @Override
             public void onSuccess(String s) {
-                if (s.equals("und")) {
-                    Toast.makeText(getApplicationContext(), "Language Not Identified", Toast.LENGTH_SHORT).show();
+
+
+                if (!languagesList.contains(s) || s == "und") {
+                    Toast.makeText(getApplicationContext(), "Language Not Identified :" + s, Toast.LENGTH_SHORT).show();
+                    mSourceLang.setText("unknown");
+                    mTranslatedText.setText("can not translate this picture");
 
 
                 } else {
@@ -322,47 +439,57 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
         });
     }
 
-    private void getLanguageCode(String language) {
-        int langCode;
-        switch (language) {
-            case "hi":
-                langCode = FirebaseTranslateLanguage.HI;
-                mSourceLang.setText("Hindi");
-                break;
-            case "ar":
-                langCode = FirebaseTranslateLanguage.AR;
-                mSourceLang.setText("Arabic");
-                break;
-            case "es":
-                langCode = FirebaseTranslateLanguage.ES;
-                mSourceLang.setText("Spanish");
-                break;
+    private void getLanguageCode(String langCode) {
+        int languageCode;
+        String language = mapLanguages.get(langCode);
+        languageCode = FirebaseTranslateLanguage.languageForLanguageCode(langCode.toUpperCase());
+        mSourceLang.setText(language);
 
 
-            case "fr":
-                langCode = FirebaseTranslateLanguage.FR;
-                mSourceLang.setText("French");
-                break;
-            case "en":
-                langCode = FirebaseTranslateLanguage.EN;
-                mSourceLang.setText("English");
-                break;
-            case "it":
-                langCode = FirebaseTranslateLanguage.IT;
-                mSourceLang.setText("Italian");
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + language);
-        }
-        ;
-        translateText(langCode);
+        translation(languageCode);
     }
+//    private void getLanguageCode(String language) {
+//        int langCode;
+//        switch (language) {
+//            case "hi":
+//                langCode = FirebaseTranslateLanguage.HI;
+//                mSourceLang.setText("Hindi");
+//                break;
+//            case "ar":
+//                langCode = FirebaseTranslateLanguage.AR;
+//                mSourceLang.setText("Arabic");
+//                break;
+//            case "es":
+//                langCode = FirebaseTranslateLanguage.ES;
+//                mSourceLang.setText("Spanish");
+//                break;
+//
+//
+//            case "fr":
+//                langCode = FirebaseTranslateLanguage.FR;
+//                mSourceLang.setText("French");
+//                break;
+//            case "en":
+//                langCode = FirebaseTranslateLanguage.EN;
+//                mSourceLang.setText("English");
+//                break;
+//            case "it":
+//                langCode = FirebaseTranslateLanguage.IT;
+//                mSourceLang.setText("Italian");
+//                break;
+//            default:
+//                throw new IllegalStateException("Unexpected value: " + language);
+//
+//        }
+//        ;
+//        translation(langCode);
+//    }
 
 
-    private void translateText(int langCode) {
+    private void translation(int langCode) {
         mTranslatedText.setText("Translating..");
-        System.out.println("///////////////////////-00000");
-        System.out.println(selectLanguage.getSelectedItem().toString());
+
+
         FirebaseTranslatorOptions options = new FirebaseTranslatorOptions.Builder()
                 //from language
                 .setSourceLanguage(langCode)
