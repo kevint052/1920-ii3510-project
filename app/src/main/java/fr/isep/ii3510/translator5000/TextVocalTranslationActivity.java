@@ -3,6 +3,9 @@ package fr.isep.ii3510.translator5000;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,10 +36,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class TextVocalTranslationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
-    private List<String> buttonMethodsNames = Arrays.asList("talk", "swap", "listen", "shareButton", "back");
+    private List<String> buttonMethodsNames = Arrays.asList("speakButton", "swapButton", "listenButton", "shareButton", "back");
     private Button picturesButton, filesButton, translateButton, back;
 
 
@@ -47,7 +51,10 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
     private String sourceText;
     private Spinner mLanguageFrom;
     private Spinner mLanguageTo;
-
+    private Button mListenButton;
+    private Button mSpeakButton;
+    private Button mSwapButton;
+    private TextToSpeech mTTS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +107,36 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
         mTranslatedText = findViewById(R.id.textTo);
         mLanguageFrom = findViewById(R.id.languageFrom);
         mLanguageTo = findViewById(R.id.languageTo);
+        mListenButton = findViewById(R.id.listenButton);
+        mSpeakButton = findViewById(R.id.speakButton);
+        mSwapButton = findViewById(R.id.swapButton);
+
+
+        mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = mTTS.setLanguage(Locale.FRENCH);
+
+                    if (result == TextToSpeech.LANG_MISSING_DATA
+                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Log.e("TTS", "Language not supported");
+                    } else {
+                        mListenButton.setEnabled(true);
+                    }
+                } else {
+                    Log.e("TTS", "Initialization failed");
+                }
+            }
+        });
+
+        mListenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listen();
+            }
+        });
+
 
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -110,6 +147,20 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
 
         mLanguageTo.setAdapter(adapter);
         mLanguageTo.setOnItemSelectedListener(this);
+
+        mSwapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int sourceLangPosition = mLanguageFrom.getSelectedItemPosition();
+                mLanguageFrom.setSelection(mLanguageTo.getSelectedItemPosition());
+                mLanguageTo.setSelection(sourceLangPosition);
+
+                String outputText = mTranslatedText.getText().toString();
+                String inputText = sourceText;
+                mSourceText.setText(outputText);
+                mTranslatedText.setText(inputText);
+            }
+        });
 
 
         mTranslateBtn.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +173,23 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
 
     }
 
+    private void listen() {
+        String text = mTranslatedText.getText().toString();
+        mTTS.setPitch(1.0f);
+        mTTS.setSpeechRate(1.0f);
+
+        mTTS.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mTTS != null) {
+            mTTS.stop();
+            mTTS.shutdown();
+        }
+
+        super.onDestroy();
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
