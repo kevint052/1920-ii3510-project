@@ -11,28 +11,29 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="48dp"
-        tools:layout_editor_absoluteX="96dp"
-        tools:layout_editor_absoluteY="94dp">
+        tools:layout_editor_absoluteX="-26dp"
+        tools:layout_editor_absoluteY="-59dp">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
             android:text="Text and vocal translation"
-            android:layout_marginBottom="30dp"
             android:textAlignment="center"
             android:textSize="30sp"
             android:textStyle="bold" />
 
         <Spinner
-            android:id="@+id/from"
+            android:id="@+id/languageFrom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <EditText
             android:id="@+id/textFrom"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:inputType="text"/>
+            android:layout_height="75dp"
+            android:inputType="textMultiLine" />
 
         <Button
             android:id="@+id/talk"
@@ -41,37 +42,37 @@
             android:text="Voice input" />
 
         <TextView
+            android:id="@+id/sourceLang"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:textSize="20sp"
-            android:text="Detecting.."
             android:layout_gravity="center_horizontal"
-            android:id="@+id/sourceLang"/>
+            android:text="Detecting.."
+            android:textSize="20sp" />
 
         <Button
+            android:id="@+id/translate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Translate"
-            android:id="@+id/translate"/>
+            android:text="Translate" />
 
         <Button
             android:id="@+id/swap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="10dp"
             android:text="Swap languages" />
 
         <Spinner
-            android:id="@+id/to"
+            android:id="@+id/languageTo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <EditText
             android:id="@+id/textTo"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:inputType="text"/>
+            android:layout_height="75dp"
+            android:inputType="textMultiLine" />
 
         <Button
             android:id="@+id/listen"
@@ -84,15 +85,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="120dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="Share" />
 
         <Button
             android:id="@+id/back"
-            android:layout_marginLeft="120dp"
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="5dp"
             android:text="Back" />
 
 

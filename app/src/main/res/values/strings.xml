@@ -2,7 +2,7 @@
     <string name="app_name">Translator 5000</string>
 
 
-    <string-array name="languages">
+    <string-array name="languages2">
         <item>FR</item>
         <item>EN</item>
         <item>ES</item>
@@ -10,4 +10,15 @@
         <item>AR</item>
 
     </string-array>
+
+    <string-array name="languages">
+        <item>Russian</item>
+        <item>French</item>
+        <item>English</item>
+        <item>Spanish</item>
+        <item>German</item>
+        <item>Chinese</item>
+        <item>Arabic</item>
+    </string-array>
+
 </resources>
