@@ -151,14 +151,17 @@
                 android:layout_height="wrap_content"
                 android:text="Share"
                 android:layout_gravity="center"
+                android:gravity="center"
 
                 android:layout_marginTop="10dp"/>
             <Button
                 android:id="@+id/back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
+
                 android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:gravity="center"
                 android:text="Back" />
 
 
