@@ -1,6 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
-</LinearLayout>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="48dp"
+            tools:layout_editor_absoluteX="-26dp"
+            tools:layout_editor_absoluteY="-59dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-10dp"
+                android:layout_marginBottom="15dp"
+                android:text="Your previous translations"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text1"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/border"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/translate1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Translate again" />
+
+            <TextView
+                android:id="@+id/text2"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/border"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/translate2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Translate again" />
+
+            <TextView
+                android:id="@+id/text3"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/border"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/translate3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Translate again" />
+
+            <TextView
+                android:id="@+id/text4"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/border"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/translate4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Translate again" />
+
+            <TextView
+                android:id="@+id/text5"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/border"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/translate5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Translate again" />
+
+            <TextView
+                android:id="@+id/text6"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/border"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/translate6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Translate again" />
+
+            <TextView
+                android:id="@+id/text7"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:background="@drawable/border"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/translate7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Translate again" />
+
+
+            <Button
+                android:id="@+id/back"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Go back to translations" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,21 +34,31 @@
             android:layout_marginHorizontal="10dp"
             android:textSize="19sp" />
 
+            <Button
+            android:id="@+id/textTranslation"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="80dp"
+            android:text="Text or vocal translation" />
+
         <Button
             android:id="@+id/imageTranslation"
-            android:layout_width="193dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="60dp"
-            android:layout_marginTop="80dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
             android:text="Image translation" />
 
         <Button
-            android:id="@+id/textTranslation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="60dp"
-            android:text="Text or vocal translation" />
+            android:layout_gravity="center_horizontal"
+            android:onClick="rate"
+            android:layout_marginTop="20dp"
+            android:text="Rate Me!"
+             />
 
 
     </LinearLayout>
