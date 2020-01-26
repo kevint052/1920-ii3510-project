@@ -333,7 +333,7 @@ public class PictureTranslation extends AppCompatActivity implements AdapterView
 
             }
             ;
-            if (!fileExt.contains("pdf") && !fileExt.contains("doc")) {
+            if (!fileExt.contains("pdf")) {
 
                 Bitmap imageBitmap = null;
                 try {
