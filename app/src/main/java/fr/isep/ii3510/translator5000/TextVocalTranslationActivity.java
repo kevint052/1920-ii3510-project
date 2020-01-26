@@ -14,8 +14,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.ActivityNotFoundException;
+import android.speech.RecognizerIntent;
+
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Continuation;
@@ -34,16 +38,18 @@ import com.google.firebase.ml.naturallanguage.translate.FirebaseTranslatorOption
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 public class TextVocalTranslationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
-    private List<String> buttonMethodsNames = Arrays.asList("speakButton", "swapButton", "listenButton", "shareButton", "back");
+    private List<String> buttonMethodsNames = Arrays.asList("speakButton", "swapButton", "listenButton", "historyButton", "back");
     private Button picturesButton, filesButton, translateButton, back;
 
 
+    private static final int REQUEST_CODE_SPEECH_INPUT = 1000;
     private TextView mSourceLang;
     private EditText mSourceText;
     private Button mTranslateBtn;
@@ -54,6 +60,7 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
     private Button mListenButton;
     private Button mSpeakButton;
     private Button mSwapButton;
+    private Button mHistoryButton;
     private TextToSpeech mTTS;
 
     @Override
@@ -110,6 +117,7 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
         mListenButton = findViewById(R.id.listenButton);
         mSpeakButton = findViewById(R.id.speakButton);
         mSwapButton = findViewById(R.id.swapButton);
+        mHistoryButton = findViewById(R.id.historyButton);
 
 
         mTTS = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
@@ -138,6 +146,13 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
         });
 
 
+
+        mHistoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openHistoryActivity();
+            }
+        });
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.languages, android.R.layout.simple_spinner_item);
@@ -171,6 +186,54 @@ public class TextVocalTranslationActivity extends AppCompatActivity implements A
         });
 
 
+        mSpeakButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),
+                        "click",
+                        Toast.LENGTH_SHORT).show();
+                speak();
+            }
+        });
+    }
+
+    public void openHistoryActivity() {
+        Intent intent = new Intent(this, History.class);
+        startActivity(intent);
+    }
+
+    private void speak() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+                "Say something...");
+        try {
+            startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(),
+                    "Sorry! An error occurred.",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_CODE_SPEECH_INPUT: {
+                if (resultCode == RESULT_OK && null != data) {
+                    //get text array from voice intent
+                    ArrayList<String> result = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    String text = result.get(0);
+                    mSourceText.setText(text);
+                }
+                break;
+            }
+        }
     }
 
     private void listen() {
